@@ -9,9 +9,7 @@
     \centering
     \begin{tikzpicture}[trim axis left, trim axis right] % options to centre correctly
         \def\dydx{3-0.08*y} % differential equation: dy/dx = f(x,y) => \def\dydx{f(x,y)}
-        % this example has two solutions for a given `c`, i.e. parameter #1
-        \newcommand\upperSolution[1]{(3+exp(-0.08*(x+#1)))/0.08} % for starting point above y=37.5
-        \newcommand\lowerSolution[1]{(3-exp(-0.08*(x+#1)))/0.08} % for starting point below y=37.5
+        \newcommand\solution[1]{37.5+#1*exp(-0.08*x)} % general solution with integration constant c, given by #1
 
         % domain and tick settings - note domain is square, change in axis options if needed
         \def\domainMin{-25}
@@ -36,19 +34,19 @@
             \addplot3[black!60, quiver={u=1/(sqrt((\dydx)^2+1)), v=(\dydx)/(sqrt((\dydx)^2+1)), scale arrows=1.6}, samples=32, forget plot] (x,y,0);
 
             % plot initial points and corresponding solution curves
-            \addplot[very thick, black!100, samples=100] plot (x,\lowerSolution{12.5*(ln(5)-ln(7))});
-            \labelledPoint{0,20}{above left};
-
-            \addplot[very thick, black!35, samples=100] plot (x,\lowerSolution{-12.5*ln(3)});
-            \labelledPoint{0,0}{below right};
-
-            \addplot[very thick, black!35, samples=100] plot (x,\upperSolution{12.5*ln(5)});
+            \addplot[very thick, black!25, samples=100] plot (x,\solution{2.5});
             \labelledPoint{0,40}{above right};
 
-            % add legend, ignoring quiver plot and the last solution curve
-            \legend{Eq. (12.8), Other ICs}
+            \addplot[very thick, black!50, samples=100] plot (x,\solution{-17.5});
+            \labelledPoint{0,20}{above left};
+
+            \addplot[very thick, black!100, samples=100] plot (x,\solution{-37.5});
+            \labelledPoint{0,0}{below right};
+
+            % add legend, ignoring quiver plot
+            \legend{$C=2.5$, $C=-17.5$, $C=-37.5$}
         \end{axis}
     \end{tikzpicture}
-    \caption{Slope field of $\frac{\mathrm{d}w}{\mathrm{d}t}=3-0.08w$ with solutions intersecting various initial conditions.}
+    \caption{Slope field of $\frac{\mathrm{d}}{t}=3-0.08w$, with general solution $w(t)=Ce^{-0.08t}+37.5$}
 \end{figure}
 \end{document}
