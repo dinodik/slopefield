@@ -39,15 +39,12 @@
 	    \pgfmathsetmacro{\hy}{(\ymax-\ymin)/(\numSlopes+1)}
 	    \pgfmathsetmacro{\totalSlopes}{\numSlopes^2-1}
 	    \pgfplotsinvokeforeach{0,...,\totalSlopes} {
-		    % \edef\blah{5}
-		    % \pgfmathparse{2*5}\edef\blah{\pgfmathresult}
 		    \pgfmathparse{mod(#1, \numSlopes))}\edef\i{\pgfmathresult}
 		    \pgfmathparse{int(#1 / \numSlopes)}\edef\j{\pgfmathresult}
 		    \pgfmathparse{dydx({\hx+\xmin+\i*\hx}, {\hy+\ymin+\j*\hy})}\edef\slope{\pgfmathresult}
 		    \pgfmathparse{\scale/sqrt((\slope)^2+1)}\edef\dx{\pgfmathresult}
-		    \pgfmathparse{\scale*\slope/sqrt((\slope)^2+1)}\edef\dy{\pgfmathresult}
-		    \edef\tmp{\noexpand\draw[teal] ({\hx+\xmin+\i*\hx-\dx/2},{\hy+\ymin+\j*\hy-\dy/2})--({\hx+\xmin+\i*\hx+\dx/2},{\hy+\ymin+\j*\hy+\dy/2});}\tmp
-		    % \edef\tmp{\noexpand\draw ({\hx+\xmin+\i*\hx},{\hy+\ymin+\j*\hy})--({\hx+\xmin+\i*\hx},{\hy+\ymin+\j*\hy+2});}\tmp
+		    \pgfmathparse{\slope*\dx}\edef\dy{\pgfmathresult}
+		    \edef\tmp{\noexpand\draw[teal] ({\hx+\xmin+\i*\hx-\dx/2},{\hy+\ymin+\j*\hy-\slope*\dx/2})--({\hx+\xmin+\i*\hx+\dx/2},{\hy+\ymin+\j*\hy+\slope*\dx/2});}\tmp
 	    }
 
 	    % #1: coordinates of node, #2: relative position of node label (can also be angle)
