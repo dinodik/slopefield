@@ -52,19 +52,19 @@
 
             % plot initial points and corresponding solution curves
 	    \addplot[very thick, black!25, samples=100] {solution(x, 1)};
-            % \labelledPoint{0,40}{above right};
+	    \labelledPoint{1,2}{below right};
 
 	    \addplot[very thick, black!50, samples=100] {solution(x, -0.25)};
-            % \labelledPoint{0,20}{above left};
+	    \labelledPoint{-3,-1.5}{below right};
 
             \addplot[very thick, black!100, samples=100] {solution(x, -2)};
-            % \labelledPoint{0,0}{below right};
+	    \labelledPoint{-0.5,0.5}{above};
 
-            % add legend
-            \legend{$C=2.5$, $C=-17.5$, $C=-37.5$}
+            % add legend, ignoring quiver plot
+            \legend{$C=1$, $C=-0.25$, $C=-2$}
         \end{axis}
 
     \end{tikzpicture}
-    \caption{Slope field of $\frac{\mathrm{d}}{t}=3-0.08w$, with general solution $w(t)=Ce^{-0.08t}+37.5$}
+    % \caption{Slope field of $\frac{\mathrm{d}}{t}=3-0.08w$, with general solution $w(t)=Ce^{-0.08t}+37.5$}
 \end{figure}
 \end{document}
