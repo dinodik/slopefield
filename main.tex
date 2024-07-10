@@ -1,0 +1,85 @@
+
+% Notes:
+% - Must know analytical solution
+% - Quivers are pivoted at tail rather than middle
+% - Solution curves are defined by fixing `c` instead of setting initial points
+% Missing:
+% - Axis labels
+% - Initial point labels?
+
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{arev}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.17}
+
+\newcommand{\slopefield}[8]{
+    \begin{tikzpicture}[scale=1.2]
+        % define variable inside local tikz scope
+        \def\dydx{#1} % differential equation: dy/dx = f(x,y) => \def\dydx{f(x,y)}
+        \def\solution{#2} % solution to differential equation in terms of \c and x
+        \def\C{#3} % list of \c values to plug into solution and plot
+        \def\initial{#4}
+        \def\domainMin{#5}
+        \def\domainMax{#6}
+        \def\tickStep{#7}
+        \def\quiverScale{#8}
+
+        \def\ticks{\domainMin,\domainMin+\tickStep,...,\domainMax}
+
+        \begin{axis}[view = {0}{90}, % set camera to point towards x-y plane
+                     domain=\domainMin:\domainMax,
+                     xmin=\domainMin, xmax=\domainMax,
+                     ymin=\domainMin, ymax=\domainMax,
+                     xtick = \ticks, ytick = \ticks,
+                     axis equal image]
+            % plot unit length quivers with no head
+            % change `samples` for density and `scale arrows` for size
+            \addplot3[black, quiver={u=1/(sqrt((\dydx)^2+1)), v=(\dydx)/(sqrt((\dydx)^2+1)),
+                    scale arrows=\quiverScale}, samples=32] (x,y,0);
+            % plot solutions by fixing the degree of freedom \c
+            \foreach \c in \C {
+                \addplot[thick, blue, samples=100] plot (x,\solution); % plot relevant solution
+            }
+            % plot initial plots
+            % since pgfplots postpones loop evaluation, we use \edef workaround
+            % https://tex.stackexchange.com/questions/170664/
+            \foreach \point in \initial {
+                \edef\drawpoints{\noexpand \fill \point circle[radius=2pt]}
+                \drawpoints;
+            }
+        \end{axis}
+    \end{tikzpicture}
+}
+
+\newcommand\dd[2]{\frac{\mathrm{d}#1}{\mathrm{d}#2}}
+\newcounter{ex}
+\newcommand\ex{\stepcounter{ex}\arabic{ex}}
+
+\begin{document}
+\begin{centering}
+    Example \ex: $\dd{w}{t}=3-0.08w$ from p.2 \\
+    Note that for every $c$ there's actually two solutions (only one drawn) \\
+    \slopefield{3-0.08*y}{(3-exp(-0.08*(x+\c)))/0.08}{-40, -20, -10, 0}{}{-20}{60}{20}{1.6}
+
+    \vspace{1in}
+
+    Example \ex: $\dd{y}{x}-\frac{y}{x}=-\frac{2}{x}$ from Q3a on p.7\\
+    \slopefield{y/x-2/x}{\c*x+2}{-2,...,2}{(1,1)}{-3}{3}{1}{0.12}
+
+    \pagebreak
+
+    Example \ex: $\dd{y}{x}=x+y$ \\
+    \slopefield{x+y}{\c*exp(x)-x-1}{-3,...,3}{(0,1),(0,-2)}{-3}{3}{1}{0.12}
+
+    \vspace{1in}
+
+    Example \ex: $\dd{y}{x}=xy$ \\
+    \slopefield{x*y}{\c*exp(0.5*x^2)}{-1,-0.75,...,1}{(0,0.5)}{-1.5}{1.5}{0.5}{0.06}
+
+    \pagebreak
+
+    Example \ex: $\dd{y}{x}+\frac{2xy^2+\sin{x}}{2x^2y+\cos{y}}=0$ from Example 13-4 on p.13 \\
+    \slopefield{-(2*x*y^2 + sin(x))/(2*x^2*y + cos(y))}{0}{}{}{-5}{5}{1}{0.2}
+\end{centering}
+\end{document}
