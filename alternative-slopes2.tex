@@ -1,0 +1,93 @@
+\documentclass[12pt]{article}
+\usepackage[margin=0.1in]{geometry}
+\usepackage{arev}
+\usepackage{pgfplots}
+\usetikzlibrary{calc}
+\pgfplotsset{compat=newest}
+
+% default axis settings
+\def\width{9cm} \def\height{9cm}
+\def\xmin{-4} \def\xmax{4}
+\def\ymin{-4} \def\ymax{4}
+\def\xticks{\xmin,...,\xmax}
+\def\yticks{\ymin,...,\ymax}
+
+% #1: coordinates of node, #2: relative position of node label (can also be angle)
+\newcommand\labelledPoint[2]{\node[circle, fill, inner sep=2pt, label={[fill=white,distance=1pt,inner sep=1pt]#2:{(#1)}}] at (#1){}}
+
+% #1: dydx, #2 solution
+\newcommand\slopefield[2]{
+    \begin{tikzpicture}[
+            % trim axis left, trim axis right, % options to centre correctly
+            declare function={
+            dydx(\x,\y) = #1; % differential equation
+            solution(\x,\c) = #2; % general solution including constant of integration
+            },
+        ]
+
+        % Dummy axis plot: https://tex.stackexchange.com/questions/170664/
+        \begin{axis}[xmin=\xmin, xmax=\xmax, ymin=\ymin, ymax=\ymax, width=\width, height=\height, hide axis]
+            \coordinate (O) at (axis cs:0,0);
+            \coordinate (X) at (axis cs:1,0);
+            \coordinate (Y) at (axis cs:0,1);
+        \end{axis}
+
+        \begin{scope}[x={($(X)-(O)$)}, y={($(Y)-(O)$)}, shift={(O)}]
+
+        % Slopefield plotting
+        \def\numSlopes{32}
+        \pgfmathsetmacro{\scale}{(\xmax-\xmin)/50}
+        \pgfmathsetmacro{\hx}{(\xmax-\xmin)/(\numSlopes+1)} % +2 to account for the slopes at the domain edge that aren't drawn
+        \pgfmathsetmacro{\hy}{(\ymax-\ymin)/(\numSlopes+1)}
+        \pgfmathsetmacro{\totalSlopes}{\numSlopes^2-1}
+        \foreach \i [evaluate=\i as \x using \xmin+\i*\hx] in {1,...,\numSlopes} {
+            \foreach \j [evaluate=\j as \y using \ymin+\j*\hy] in {1,...,\numSlopes} {
+                \pgfmathsetmacro{\slope}{dydx(\x, \y)};
+                \pgfmathsetmacro{\dx}{\scale/sqrt((\slope)^2+1)};
+                \pgfmathsetmacro{\dy}{\slope*\dx};
+                \draw ({\x-\dx/2}, {\y-\dy/2})--({\x+\dx/2}, {\y+\dy/2});
+            };
+        };
+        \end{scope}
+
+        % Function/point plotting
+        \begin{axis}[
+            domain=\xmin:\xmax,
+            xmin=\xmin, xmax=\xmax, ymin=\ymin, ymax=\ymax,
+            restrict x to domain=\xmin:\xmax,
+            % restrict y to domain=\ymin:\ymax, // for extra safety
+            xtick=\xticks, ytick=\yticks,
+            tick align=outside,
+            width=\width, height=\height,
+            legend pos=south east, legend cell align={left}, axis equal image,
+            ]
+
+            % plot initial points and corresponding solution curves
+            \addplot[very thick, black!25, samples=100] {solution(x, 1)};
+            \labelledPoint{1,2}{below right};
+
+            \addplot[very thick, black!50, samples=100] {solution(x, -0.25)};
+            \labelledPoint{-3,-1.5}{below right};
+
+            \addplot[very thick, black!100, samples=100] {solution(x, -2)};
+            \labelledPoint{-0.5,0.5}{above};
+
+            % add legend, ignoring quiver plot
+            \legend{$C=1$, $C=-0.25$, $C=-2$}
+        \end{axis}
+    \end{tikzpicture}
+}
+
+\begin{document}
+\begin{figure}[h]
+    \centering
+
+    \def\width{9cm} \def\height{9cm}
+    \def\xmin{-3.25} \def\xmax{2.25}
+    \def\ymin{-3.25} \def\ymax{2.25}
+    \def\xticks{\xmin+0.25,...,\xmax-0.25}
+    \def\yticks{\xticks}
+    \slopefield{(2*\x+1)*\y / ((\x)^2+\x)}{\c*(\x^2 + \x)}
+
+\end{figure}
+\end{document}
