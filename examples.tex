@@ -9,6 +9,7 @@
 \definecolor{colour2}{RGB}{232, 93, 73}
 \definecolor{colour3}{RGB}{135, 0, 97}
 
+\tracinglostchars=2
 \begin{document}
 
 % First example of the notes
@@ -42,12 +43,12 @@
         \pgfmathsetmacro{\totalSlopes}{\numSlopes^2-1}
         \foreach \i [evaluate=\i as \x using \domainMin+\i*\h] in {1,...,\numSlopes} {
             \foreach \j [evaluate=\j as \y using \domainMin+\j*\h] in {1,...,\numSlopes} {
-                \pgfmathsetmacro{\slope}{dydx(\x,\y)};
-                \pgfmathsetmacro{\dx}{\scale/sqrt((\slope)^2+1)};
-                \pgfmathsetmacro{\dy}{\slope*\dx};
+                \pgfmathsetmacro{\slope}{dydx(\x,\y)}
+                \pgfmathsetmacro{\dx}{\scale/sqrt((\slope)^2+1)}
+                \pgfmathsetmacro{\dy}{\slope*\dx}
                 \draw[thin] ({\x-\dx/2}, {\y-\dy/2})--({\x+\dx/2}, {\y+\dy/2});
-            };
-        };
+            }
+        }
         \end{scope}
 
         % Axis where solutions are plotted
@@ -110,12 +111,12 @@
         \pgfmathsetmacro{\totalSlopes}{\numSlopes^2-1}
         \foreach \i [evaluate=\i as \x using \domainMin+\i*\h] in {1,...,\numSlopes} {
             \foreach \j [evaluate=\j as \y using \domainMin+\j*\h] in {1,...,\numSlopes} {
-                \pgfmathsetmacro{\slope}{dydx(\x,\y)};
-                \pgfmathsetmacro{\dx}{\scale/sqrt((\slope)^2+1)};
-                \pgfmathsetmacro{\dy}{\slope*\dx};
+                \pgfmathsetmacro{\slope}{dydx(\x,\y)}
+                \pgfmathsetmacro{\dx}{\scale/sqrt((\slope)^2+1)}
+                \pgfmathsetmacro{\dy}{\slope*\dx}
                 \draw[thin] ({\x-\dx/2}, {\y-\dy/2})--({\x+\dx/2}, {\y+\dy/2});
-            };
-        };
+            }
+        }
         \end{scope}
 
         \begin{axis}[view = {0}{90}, % set camera to point towards x-y plane
@@ -194,12 +195,12 @@
         \pgfmathsetmacro{\totalSlopes}{\numSlopes^2-1}
         \foreach \i [evaluate=\i as \x using \domainMin+\i*\h] in {1,...,\numSlopes} {
             \foreach \j [evaluate=\j as \y using \domainMin+\j*\h] in {1,...,\numSlopes} {
-                \pgfmathsetmacro{\slope}{dydx(\x,\y)};
-                \pgfmathsetmacro{\dx}{\scale/sqrt((\slope)^2+1)};
-                \pgfmathsetmacro{\dy}{\slope*\dx};
+                \pgfmathsetmacro{\slope}{dydx(\x,\y)}
+                \pgfmathsetmacro{\dx}{\scale/sqrt((\slope)^2+1)}
+                \pgfmathsetmacro{\dy}{\slope*\dx}
                 \draw[thin] ({\x-\dx/2}, {\y-\dy/2})--({\x+\dx/2}, {\y+\dy/2});
-            };
-        };
+            }
+        }
         \end{scope}
 
         \begin{axis}[view = {0}{90}, % set camera to point towards x-y plane

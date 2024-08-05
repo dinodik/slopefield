@@ -8,7 +8,6 @@
 
 \begin{document}
 \section*{Quiz}
-
 On each slope field, sketch any three particular solutions and find the corresponding
 
 \begin{figure}[!hbt]
@@ -73,12 +72,12 @@ On each slope field, sketch any three particular solutions and find the correspo
         \pgfmathsetmacro{\totalSlopes}{\numSlopes^2-1}
         \foreach \i [evaluate=\i as \x using \domainMin+\i*\hx] in {1,...,\numSlopes} {
             \foreach \j [evaluate=\j as \y using \domainMin+\j*\hy] in {1,...,\numSlopes} {
-                \pgfmathsetmacro{\slope}{dydx(\x, \y)};
-                \pgfmathsetmacro{\dx}{\scale/sqrt((\slope)^2+1)};
-                \pgfmathsetmacro{\dy}{\slope*\dx};
+                \pgfmathsetmacro{\slope}{dydx(\x, \y)}
+                \pgfmathsetmacro{\dx}{\scale/sqrt((\slope)^2+1)}
+                \pgfmathsetmacro{\dy}{\slope*\dx}
                 \draw[thin] ({\x-\dx/2},{\y-\dy/2})--({\x+\dx/2},{\y+\dy/2});
-            };
-        };
+            }
+        }
 
         % Draw additional axis lines
         \draw[black!60] (\domainMin,0)--(\domainMax,0);
