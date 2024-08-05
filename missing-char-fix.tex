@@ -1,0 +1,44 @@
+% THIS FILE DOES NOT COMPILE
+
+% Below is the original broken tex, with the erroneous lines highlighted.
+% To fix it, 5 semicolons must be removed (3 are after \pgfmathsetmacro
+% and 2 are at the end of \foreach blocks).
+
+% If you are to copy-paste the FIXED lines into the existing document,
+% make sure to ONLY copy the lines containing the \foreach blocks, because
+% some example slope fields may use a different value for \numSlopes.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% BROKEN %%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Extraction of axis coordinates and plotting slope fields
+\begin{scope}[x={($(X)-(O)$)}, y={($(Y)-(O)$)}, shift={(O)}]
+\def\numSlopes{30}
+\pgfmathsetmacro{\h}{(\domainMax-\domainMin)/(\numSlopes+1)}
+\pgfmathsetmacro{\totalSlopes}{\numSlopes^2-1}
+\foreach \i [evaluate=\i as \x using \domainMin+\i*\h] in {1,...,\numSlopes} {
+    \foreach \j [evaluate=\j as \y using \domainMin+\j*\h] in {1,...,\numSlopes} {
+        \pgfmathsetmacro{\slope}{dydx(\x,\y)}; % <-------- ERROR
+        \pgfmathsetmacro{\dx}{\scale/sqrt((\slope)^2+1)}; % <-------- ERROR
+        \pgfmathsetmacro{\dy}{\slope*\dx}; % <-------- ERROR
+        \draw[thin] ({\x-\dx/2}, {\y-\dy/2})--({\x+\dx/2}, {\y+\dy/2});
+    }; % <-------- ERROR
+}; % <-------- ERROR
+\end{scope}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% BROKEN %%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%% FIXED %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Extraction of axis coordinates and plotting slope fields
+\begin{scope}[x={($(X)-(O)$)}, y={($(Y)-(O)$)}, shift={(O)}]
+\def\numSlopes{30}
+\pgfmathsetmacro{\h}{(\domainMax-\domainMin)/(\numSlopes+1)}
+\pgfmathsetmacro{\totalSlopes}{\numSlopes^2-1}
+\foreach \i [evaluate=\i as \x using \domainMin+\i*\h] in {1,...,\numSlopes} {
+    \foreach \j [evaluate=\j as \y using \domainMin+\j*\h] in {1,...,\numSlopes} {
+        \pgfmathsetmacro{\slope}{dydx(\x,\y)}
+        \pgfmathsetmacro{\dx}{\scale/sqrt((\slope)^2+1)}
+        \pgfmathsetmacro{\dy}{\slope*\dx}
+        \draw[thin] ({\x-\dx/2}, {\y-\dy/2})--({\x+\dx/2}, {\y+\dy/2});
+    }
+}
+\end{scope}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%% FIXED %%%%%%%%%%%%%%%%%%%%%%%%%%%%
